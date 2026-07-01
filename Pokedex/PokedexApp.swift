@@ -11,7 +11,13 @@ import SwiftUI
 struct PokedexApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            PokemonListScreen(
+                viewModel: PokemonListViewModel(
+                    getPokemonList: GetPokemonListUseCase(
+                        repository: PokemonRepositoryImpl()
+                    )
+                )
+            )
         }
     }
 }
