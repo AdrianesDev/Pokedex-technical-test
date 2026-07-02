@@ -2,7 +2,6 @@ import SwiftUI
 
 struct PokemonDetailScreen: View {
     @State private var viewModel: PokemonDetailViewModel
-    @State private var isSaved: Bool = false
 
     init(viewModel: PokemonDetailViewModel) {
         _viewModel = State(initialValue: viewModel)
@@ -10,18 +9,17 @@ struct PokemonDetailScreen: View {
 
     var body: some View {
         content
-            .toolbar(content: {
+            .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Image(systemName: isSaved == true ? "bookmark.fill" : "bookmark")
+                    Image(systemName: viewModel.isFavorite ? "bookmark.fill" : "bookmark")
                         .onTapGesture {
-                            withAnimation(.bouncy) {
-                                isSaved.toggle()
-                            }
+                            Task { await viewModel.toggleFavorite() }
                         }
                         .font(.title2)
                         .foregroundStyle(.black)
+                        .animation(.bouncy, value: viewModel.isFavorite)
                 }
-            })
+            }
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.large)
             .task { await viewModel.load() }
@@ -44,17 +42,21 @@ struct PokemonDetailScreen: View {
                 Task { await viewModel.load() }
             }
         case .loaded(let detail):
-            PokemonDetailContentView(detail: detail)
+            PokemonDetailContentView(detail: detail, evolutionsState: viewModel.evolutionsState)
         }
     }
 }
 
 #Preview {
-    NavigationStack {
+    let repository = PreviewPokemonRepository()
+    return NavigationStack {
         PokemonDetailScreen(
             viewModel: PokemonDetailViewModel(
                 id: 25,
-                getPokemonDetail: GetPokemonDetailUseCase(repository: PreviewPokemonRepository())
+                getPokemonDetail: GetPokemonDetailUseCase(repository: repository),
+                getPokemonEvolutions: GetPokemonEvolutionsUseCase(repository: repository),
+                toggleFavorite: ToggleFavoriteUseCase(repository: repository),
+                isPokemonFavorite: IsPokemonFavoriteUseCase(repository: repository)
             )
         )
     }

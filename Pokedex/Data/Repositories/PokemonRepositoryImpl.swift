@@ -1,8 +1,10 @@
 struct PokemonRepositoryImpl: PokemonRepository {
     private let apiClient: APIClientProtocol
+    private let localDataSource: PokemonLocalDataSource
 
-    init(apiClient: APIClientProtocol = APIClient()) {
+    init(apiClient: APIClientProtocol = APIClient(), localDataSource: PokemonLocalDataSource) {
         self.apiClient = apiClient
+        self.localDataSource = localDataSource
     }
 
     func fetchList(limit: Int, offset: Int) async throws -> [Pokemon] {
@@ -11,8 +13,14 @@ struct PokemonRepositoryImpl: PokemonRepository {
                 PokemonEndpoint.list(limit: limit, offset: offset)
             )
             let ids = response.results.compactMap(\.id)
-            return try await fetchDetails(for: ids)
+            let pokemon = try await fetchDetails(for: ids)
+            localDataSource.cacheList(pokemon)
+            return pokemon
         } catch let error as NetworkError {
+            if case .noConnection = error {
+                let cached = localDataSource.fetchCachedList()
+                if !cached.isEmpty { return cached }
+            }
             throw Self.map(error)
         }
     }
@@ -41,13 +49,42 @@ struct PokemonRepositoryImpl: PokemonRepository {
 
     func fetchDetail(id: Int) async throws -> PokemonDetail {
         do {
-            let dto: PokemonDetailDTO = try await apiClient.request(
-                PokemonEndpoint.detail(id: id)
-            )
+            let dto: PokemonDetailDTO = try await apiClient.request(PokemonEndpoint.detail(id: id))
             return PokemonMapper.map(dto)
         } catch let error as NetworkError {
             throw Self.map(error)
         }
+    }
+
+    /// Evolutions need species (for the evolution-chain id) then the chain
+    /// itself — 2 sequential calls on top of the detail's own request.
+    /// Kept separate from `fetchDetail` so the name/stats/etc. render as
+    /// soon as the single `/pokemon/{id}` call resolves, instead of the
+    /// whole screen waiting on this slower chain.
+    func fetchEvolutions(id: Int) async throws -> [PokemonEvolution] {
+        do {
+            let species: PokemonSpeciesDTO = try await apiClient.request(PokemonEndpoint.species(id: id))
+            guard let chainId = species.evolutionChainId else { return [] }
+            let chain: EvolutionChainDTO = try await apiClient.request(
+                PokemonEndpoint.evolutionChain(id: chainId)
+            )
+            return PokemonMapper.mapEvolutions(chain)
+        } catch let error as NetworkError {
+            throw Self.map(error)
+        }
+    }
+
+    @discardableResult
+    func toggleFavorite(_ pokemon: Pokemon) async -> Bool {
+        localDataSource.toggleFavorite(for: pokemon)
+    }
+
+    func isFavorite(id: Int) async -> Bool {
+        localDataSource.isFavorite(id: id)
+    }
+
+    func fetchFavorites() async -> [Pokemon] {
+        localDataSource.fetchFavorites()
     }
 
     private static func map(_ error: NetworkError) -> PokemonError {

@@ -4,11 +4,6 @@ struct PokemonListScreen: View {
     @State private var viewModel: PokemonListViewModel
     private let dependencies: AppDependencies
 
-    private let columns = [
-        GridItem(.flexible(), spacing: 12),
-        GridItem(.flexible(), spacing: 12)
-    ]
-
     init(viewModel: PokemonListViewModel, dependencies: AppDependencies) {
         _viewModel = State(initialValue: viewModel)
         self.dependencies = dependencies
@@ -48,17 +43,7 @@ struct PokemonListScreen: View {
                 if viewModel.filteredPokemon.isEmpty {
                     EmptyStateView(message: "Sin resultados para \"\(viewModel.searchText)\"")
                 } else {
-                    ScrollView {
-                        LazyVGrid(columns: columns, spacing: 12) {
-                            ForEach(viewModel.filteredPokemon) { pokemon in
-                                NavigationLink(value: pokemon.id) {
-                                    PokemonCardView(pokemon: pokemon)
-                                }
-                                .buttonStyle(.plain)
-                            }
-                        }
-                        .padding(16)
-                    }
+                    PokemonGridView(pokemon: viewModel.filteredPokemon)
                 }
             }
         }

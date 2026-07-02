@@ -9,15 +9,11 @@ import SwiftUI
 
 @main
 struct PokedexApp: App {
+    private let dependencies = AppDependencies()
+
     var body: some Scene {
         WindowGroup {
-            PokemonListScreen(
-                viewModel: PokemonListViewModel(
-                    getPokemonList: GetPokemonListUseCase(
-                        repository: PokemonRepositoryImpl()
-                    )
-                )
-            )
+            RootTabView(dependencies: dependencies)
         }
     }
 }
