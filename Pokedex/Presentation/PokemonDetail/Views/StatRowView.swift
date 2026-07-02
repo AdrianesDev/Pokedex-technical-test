@@ -24,7 +24,7 @@ struct StatRowView: View {
                     .fill(Color.gray.opacity(0.2))
                     .overlay(alignment: .leading) {
                         RoundedRectangle(cornerRadius: 4)
-                            .fill(accentColor)
+                            .fill(stat.value <= 45 ? .pink : accentColor)
                             .frame(width: geometry.size.width * normalizedValue)
                     }
             }
@@ -34,6 +34,6 @@ struct StatRowView: View {
 }
 
 #Preview {
-    StatRowView(stat: PokemonStat(name: "attack", value: 84), accentColor: .orange)
+    StatRowView(stat: PokemonStat(name: "attack", value: 44), accentColor: .orange)
         .padding()
 }

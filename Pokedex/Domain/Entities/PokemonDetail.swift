@@ -10,4 +10,5 @@ struct PokemonDetail: Identifiable, Equatable, Sendable {
     let types: [String]
     let abilities: [String]
     let stats: [PokemonStat]
+    let weaknesses: [String]
 }

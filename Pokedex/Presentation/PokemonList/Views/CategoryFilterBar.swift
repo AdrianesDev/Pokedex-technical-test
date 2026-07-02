@@ -52,7 +52,8 @@ private struct CategoryChipView: View {
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? [.isSelected] : [])
-        .padding(.vertical)
+        .padding(.vertical,5)
+        
     }
 }
 

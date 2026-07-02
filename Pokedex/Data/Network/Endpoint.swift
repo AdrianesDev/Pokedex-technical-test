@@ -8,6 +8,8 @@ protocol Endpoint {
 enum PokemonEndpoint: Endpoint {
     case list(limit: Int, offset: Int)
     case detail(id: Int)
+    case species(id: Int)
+    case evolutionChain(id: Int)
 
     var path: String {
         switch self {
@@ -15,6 +17,10 @@ enum PokemonEndpoint: Endpoint {
             return "/pokemon"
         case .detail(let id):
             return "/pokemon/\(id)"
+        case .species(let id):
+            return "/pokemon-species/\(id)"
+        case .evolutionChain(let id):
+            return "/evolution-chain/\(id)"
         }
     }
 
@@ -25,7 +31,7 @@ enum PokemonEndpoint: Endpoint {
                 URLQueryItem(name: "limit", value: String(limit)),
                 URLQueryItem(name: "offset", value: String(offset))
             ]
-        case .detail:
+        case .detail, .species, .evolutionChain:
             return nil
         }
     }

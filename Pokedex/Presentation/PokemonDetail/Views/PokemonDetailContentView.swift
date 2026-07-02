@@ -3,6 +3,7 @@ import SwiftUI
 struct PokemonDetailContentView: View {
     @Environment(\.colorScheme) private var colorScheme
     let detail: PokemonDetail
+    let evolutionsState: PokemonDetailViewModel.EvolutionsState
 
     @MainActor
     private var accentColor: Color {
@@ -46,7 +47,6 @@ struct PokemonDetailContentView: View {
                         HStack(spacing: 24) {
                             metric(title: "Altura", value: String(format: "%.1f m", detail.heightInMeters))
                             metric(title: "Peso", value: String(format: "%.1f kg", detail.weightInKilograms))
-                            metric(title: "Género", value: detail.gender.displayText)
                             if let baseExperience = detail.baseExperience {
                                 metric(title: "Exp. base", value: "\(baseExperience)")
                             }
@@ -61,6 +61,7 @@ struct PokemonDetailContentView: View {
                         .foregroundStyle(.white)
                         .shadow(radius: 10)
                 }
+                
                 section(title: "Habilidades") {
                     Text(detail.abilities.map { $0.capitalized }.joined(separator: ", "))
                         .foregroundStyle(.secondary)
@@ -84,33 +85,53 @@ struct PokemonDetailContentView: View {
                     }
                 }
 
-                if !detail.evolutions.isEmpty {
-                    section(title: "Evoluciones") {
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 12) {
-                                ForEach(detail.evolutions) { evolution in
-                                    EvolutionCardView(evolution: evolution)
-                                }
-                            }
-                        }
-                    }
-                }
+                evolutionsSection
             }
             .padding()
         }
         .background(accentColor.opacity(0.4))
     }
 
+    @ViewBuilder
+    private var evolutionsSection: some View {
+        switch evolutionsState {
+        case .loading:
+            section(title: "Evoluciones") {
+                ProgressView()
+                    .frame(maxWidth: .infinity, alignment: .center)
+            }
+        case .failed:
+            EmptyView()
+        case .loaded(let evolutions):
+            if !evolutions.isEmpty {
+                section(title: "Evoluciones") {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 12) {
+                            ForEach(evolutions) { evolution in
+                                EvolutionCardView(evolution: evolution)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private func metric(title: String, value: String) -> some View {
         VStack(spacing: 2) {
-            Text(value).font(.headline)
-            Text(title).font(.caption).foregroundStyle(.secondary)
+            Text(value)
+                .font(.headline)
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
     }
 
     private func section(title: String, @ViewBuilder content: () -> some View) -> some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(title).font(.headline)
+            Text(title)
+                .font(.headline)
+                .fontWeight(.semibold)
             content()
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -133,13 +154,12 @@ struct PokemonDetailContentView: View {
                 PokemonStat(name: "attack", value: 49),
                 PokemonStat(name: "defense", value: 49)
             ],
-            gender: .both,
-            weaknesses: ["fire", "ice", "flying", "psychic"],
-            evolutions: [
-                PokemonEvolution(id: 1, name: "bulbasaur", imageURL: URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png")),
-                PokemonEvolution(id: 2, name: "ivysaur", imageURL: URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png")),
-                PokemonEvolution(id: 3, name: "venusaur", imageURL: URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/3.png"))
-            ]
-        )
+            weaknesses: ["fire", "ice", "flying", "psychic"]
+        ),
+        evolutionsState: .loaded([
+            PokemonEvolution(id: 1, name: "bulbasaur", imageURL: URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png")),
+            PokemonEvolution(id: 2, name: "ivysaur", imageURL: URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png")),
+            PokemonEvolution(id: 3, name: "venusaur", imageURL: URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/3.png"))
+        ])
     )
 }
