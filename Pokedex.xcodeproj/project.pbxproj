@@ -29,11 +29,15 @@
 		13B28FD461E7024B93F035B4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		3A4057782FF5B7DB00E092E0 /* Pokedex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pokedex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B6EEFC44851C95997EF8FF2 /* PokemonMapperTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PokemonMapperTests.swift; sourceTree = "<group>"; };
+		978FEB83FEE8F68030DC9E6F /* list.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = list.png; sourceTree = "<group>"; };
+		9A6F8F00177F77D051C8129B /* favorites.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = favorites.png; sourceTree = "<group>"; };
 		B77865BE996B1CD90F41DA92 /* MockPokemonRepository.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MockPokemonRepository.swift; sourceTree = "<group>"; };
 		B7DAFD1E1DCC958A2876280A /* TypeEffectivenessTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TypeEffectivenessTests.swift; sourceTree = "<group>"; };
 		C09EC77F6873E63649C7CD6A /* PokemonListViewModelTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PokemonListViewModelTests.swift; sourceTree = "<group>"; };
+		CE479EE98DE0639C38975E69 /* detail.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = detail.png; sourceTree = "<group>"; };
 		E845F5363D34D6641C1C21DC /* PokemonDetailViewModelTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PokemonDetailViewModelTests.swift; sourceTree = "<group>"; };
 		EB58C8A4B07460D2524C52CB /* PokedexTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PokedexTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F97EB9506CCDC8CC5B784B54 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -93,6 +97,8 @@
 				3A4057792FF5B7DB00E092E0 /* Products */,
 				1DF9F4EADCA1A6A118AC3BD9 /* Frameworks */,
 				305AB7759588C0CA0A01F5A2 /* PokedexTests */,
+				44F2D35F7AF0FE0363BCE746 /* docs */,
+				F97EB9506CCDC8CC5B784B54 /* README.md */,
 			);
 			sourceTree = "<group>";
 		};
@@ -103,6 +109,26 @@
 				EB58C8A4B07460D2524C52CB /* PokedexTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		44F2D35F7AF0FE0363BCE746 /* docs */ = {
+			isa = PBXGroup;
+			children = (
+				5067EA2DC01C0C669D80C382 /* screenshots */,
+			);
+			name = docs;
+			path = docs;
+			sourceTree = "<group>";
+		};
+		5067EA2DC01C0C669D80C382 /* screenshots */ = {
+			isa = PBXGroup;
+			children = (
+				CE479EE98DE0639C38975E69 /* detail.png */,
+				9A6F8F00177F77D051C8129B /* favorites.png */,
+				978FEB83FEE8F68030DC9E6F /* list.png */,
+			);
+			name = screenshots;
+			path = screenshots;
 			sourceTree = "<group>";
 		};
 		5A8C21AFA8A55480339B99CD /* iOS */ = {

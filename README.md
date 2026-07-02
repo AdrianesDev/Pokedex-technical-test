@@ -8,6 +8,8 @@ Reto técnico iOS: listado de Pokémon con búsqueda y filtro por tipo, pantalla
   <img src="docs/screenshots/favorites.png" width="250" alt="Favoritos" />
 </p>
 
+**Diseño:** [Figma](https://www.figma.com/design/dJiIMetNZdy5gPFDRvL6Hm/Pokedex?node-id=0-1&t=5Yn0g79vGCDk4QTG-1)
+
 ## Cómo correrlo
 
 - Xcode 26 (o el que traiga soporte para Swift Testing y `@Observable`).
