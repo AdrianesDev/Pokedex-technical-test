@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct PokedexApp: App {
+    private let dependencies = AppDependencies()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootTabView(dependencies: dependencies)
         }
     }
 }
