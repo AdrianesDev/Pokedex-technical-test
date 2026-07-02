@@ -14,8 +14,9 @@ struct EvolutionCardView: View {
                 case .success(let image):
                     image.resizable().scaledToFit()
                 case .failure:
-                    Image(systemName: "photo")
-                        .foregroundStyle(.secondary)
+                    Image(.pokeballEmpty)
+                        .resizable()
+                        .scaledToFit()
                 default:
                     ProgressView()
                 }

@@ -13,7 +13,11 @@ struct PokemonListScreen: View {
         NavigationStack {
             content
                 .navigationTitle("Pokédex")
-                .searchable(text: $viewModel.searchText, prompt: "Buscar Pokémon")
+                .searchable(
+                    text: $viewModel.searchText,
+                    placement: .navigationBarDrawer(displayMode: .always),
+                    prompt: "Buscar Pokémon"
+                )
                 .task { await viewModel.loadInitial() }
                 .navigationDestination(for: Int.self) { pokemonId in
                     PokemonDetailScreen(viewModel: dependencies.makeDetailViewModel(id: pokemonId))
