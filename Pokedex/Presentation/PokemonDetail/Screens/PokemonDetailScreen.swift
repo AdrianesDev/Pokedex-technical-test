@@ -16,7 +16,7 @@ struct PokemonDetailScreen: View {
                             Task { await viewModel.toggleFavorite() }
                         }
                         .font(.title2)
-                        .foregroundStyle(.black)
+                        .foregroundStyle(.primary)
                         .animation(.bouncy, value: viewModel.isFavorite)
                 }
             }

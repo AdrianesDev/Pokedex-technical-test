@@ -18,7 +18,7 @@ struct RootTabView: View {
                 dependencies: dependencies
             )
             .tabItem {
-                Label("Favoritos", systemImage: "star.fill")
+                Label("Favoritos", systemImage: "bookmark.fill")
             }
         }
     }

@@ -25,8 +25,10 @@ struct PokemonCardView: View {
                         case .success(let image):
                             image.resizable().scaledToFit()
                         case .failure:
-                            Image(systemName: "photo")
-                                .foregroundStyle(.secondary)
+                            Image(.pokeballEmpty)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 80, height: 80)
                         default:
                             ProgressView()
                         }
@@ -37,7 +39,7 @@ struct PokemonCardView: View {
             VStack(alignment: .leading) {
                 
                     Text(pokemon.name.capitalized)
-                        .font(.headline)
+                    .font(.title2.bold())
                         .foregroundStyle(.primary)
                         .lineLimit(1)
                         .minimumScaleFactor(0.7)

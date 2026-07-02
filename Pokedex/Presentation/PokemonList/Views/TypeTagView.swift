@@ -5,11 +5,14 @@ struct TypeTagView: View {
 
     var body: some View {
         Text(type.capitalized)
-            .font(.caption2.bold())
-            .padding(.horizontal, 8)
-            .padding(.vertical, 4)
+            .font(.caption.bold())
+            .lineLimit(1)
+            .minimumScaleFactor(0.8)
+            .frame(width: 70)
+            .padding(.vertical, 6)
             .background(PokemonTypeColor.color(for: type))
             .foregroundStyle(.white)
+            .shadow(radius: 10)
             .clipShape(Capsule())
     }
 }

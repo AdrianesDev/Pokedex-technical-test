@@ -30,8 +30,9 @@ struct PokemonDetailContentView: View {
                             case .success(let image):
                                 image.resizable().scaledToFit()
                             case .failure:
-                                Image(systemName: "photo")
-                                    .foregroundStyle(.secondary)
+                                Image(.pokeballEmpty)
+                                    .resizable()
+                                    .scaledToFit()
                             default:
                                 ProgressView()
                             }
@@ -69,7 +70,7 @@ struct PokemonDetailContentView: View {
 
                 if !detail.weaknesses.isEmpty {
                     section(title: "Debilidades") {
-                        HStack {
+                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 80), spacing: 8)], spacing: 8) {
                             ForEach(detail.weaknesses, id: \.self) { type in
                                 TypeTagView(type: type)
                             }
