@@ -1,5 +1,7 @@
 import Foundation
 
+/// PokeAPI's real payload is much bigger (moves, game_indices, held_items,
+/// ...) — only the fields the app actually uses are declared here.
 struct PokemonDetailDTO: Decodable, Sendable {
     let id: Int
     let name: String

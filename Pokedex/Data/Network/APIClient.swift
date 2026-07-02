@@ -4,6 +4,9 @@ protocol APIClientProtocol: Sendable {
     func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T
 }
 
+/// Every failure path funnels into `NetworkError` — nothing above this
+/// layer (repository, view model) ever sees a raw `URLError` or
+/// `DecodingError`.
 struct APIClient: APIClientProtocol {
     private let baseURL: URL
     private let session: URLSession
