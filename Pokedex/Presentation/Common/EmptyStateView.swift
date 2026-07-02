@@ -5,9 +5,15 @@ struct EmptyStateView: View {
 
     var body: some View {
         VStack(spacing: 8) {
-            Image(systemName: "questionmark.circle")
-                .font(.largeTitle)
-                .foregroundStyle(.secondary)
+            ZStack {
+                Image(.pokeballRed)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 40, height: 40)
+                Image(systemName: "nosign")
+                    .font(.system(size: 60))
+                    .foregroundStyle(.black.opacity(0.4))
+            }
             Text(message)
                 .foregroundStyle(.secondary)
         }

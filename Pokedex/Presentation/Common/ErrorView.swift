@@ -6,9 +6,10 @@ struct ErrorView: View {
 
     var body: some View {
         VStack(spacing: 12) {
-            Image(systemName: "exclamationmark.triangle")
-                .font(.largeTitle)
-                .foregroundStyle(.orange)
+            Image(._58393C)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 100, height: 100)
             Text(message)
                 .multilineTextAlignment(.center)
             Button("Reintentar", action: retryAction)
