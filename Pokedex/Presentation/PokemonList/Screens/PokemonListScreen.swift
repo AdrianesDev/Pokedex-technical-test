@@ -2,14 +2,16 @@ import SwiftUI
 
 struct PokemonListScreen: View {
     @State private var viewModel: PokemonListViewModel
+    private let dependencies: AppDependencies
 
     private let columns = [
         GridItem(.flexible(), spacing: 12),
         GridItem(.flexible(), spacing: 12)
     ]
 
-    init(viewModel: PokemonListViewModel) {
+    init(viewModel: PokemonListViewModel, dependencies: AppDependencies) {
         _viewModel = State(initialValue: viewModel)
+        self.dependencies = dependencies
     }
 
     var body: some View {
@@ -18,6 +20,9 @@ struct PokemonListScreen: View {
                 .navigationTitle("Pokédex")
                 .searchable(text: $viewModel.searchText, prompt: "Buscar Pokémon")
                 .task { await viewModel.loadInitial() }
+                .navigationDestination(for: Int.self) { pokemonId in
+                    PokemonDetailScreen(viewModel: dependencies.makeDetailViewModel(id: pokemonId))
+                }
         }
     }
 
@@ -33,16 +38,27 @@ struct PokemonListScreen: View {
         case .empty:
             EmptyStateView()
         case .loaded:
-            if viewModel.filteredPokemon.isEmpty {
-                EmptyStateView(message: "Sin resultados para \"\(viewModel.searchText)\"")
-            } else {
-                ScrollView {
-                    LazyVGrid(columns: columns, spacing: 12) {
-                        ForEach(viewModel.filteredPokemon) { pokemon in
-                            PokemonCardView(pokemon: pokemon)
+            VStack(spacing: 12) {
+                CategoryFilterBar(
+                    types: viewModel.availableTypes,
+                    selectedType: viewModel.selectedType,
+                    onSelect: viewModel.selectType
+                )
+
+                if viewModel.filteredPokemon.isEmpty {
+                    EmptyStateView(message: "Sin resultados para \"\(viewModel.searchText)\"")
+                } else {
+                    ScrollView {
+                        LazyVGrid(columns: columns, spacing: 12) {
+                            ForEach(viewModel.filteredPokemon) { pokemon in
+                                NavigationLink(value: pokemon.id) {
+                                    PokemonCardView(pokemon: pokemon)
+                                }
+                                .buttonStyle(.plain)
+                            }
                         }
+                        .padding(16)
                     }
-                    .padding(16)
                 }
             }
         }
@@ -50,11 +66,17 @@ struct PokemonListScreen: View {
 }
 
 struct PokemonListScreen_container: View {
-    @State private var viewModel: PokemonListViewModel = PokemonListViewModel(
-        getPokemonList: GetPokemonListUseCase(repository: PreviewPokemonRepository())
-    )
+    private let dependencies: AppDependencies
+    @State private var viewModel: PokemonListViewModel
+
+    init() {
+        let dependencies = AppDependencies(repository: PreviewPokemonRepository())
+        self.dependencies = dependencies
+        _viewModel = State(initialValue: dependencies.makeListViewModel())
+    }
+
     var body: some View {
-        PokemonListScreen(viewModel: viewModel)
+        PokemonListScreen(viewModel: viewModel, dependencies: dependencies)
     }
 }
 

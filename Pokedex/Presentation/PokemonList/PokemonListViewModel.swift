@@ -15,6 +15,7 @@ final class PokemonListViewModel {
     private(set) var state: State = .idle
     private(set) var pokemon: [Pokemon] = []
     var searchText: String = ""
+    private(set) var selectedType: String?
 
     private let getPokemonList: GetPokemonListUseCase
 
@@ -22,9 +23,29 @@ final class PokemonListViewModel {
         self.getPokemonList = getPokemonList
     }
 
+    /// Only the types actually present in the loaded list — filtering by a
+    /// type nothing here has would just be a dead end for the user.
+    var availableTypes: [String] {
+        Array(Set(pokemon.flatMap(\.types))).sorted()
+    }
+
     var filteredPokemon: [Pokemon] {
-        guard !searchText.isEmpty else { return pokemon }
-        return pokemon.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+        var result = pokemon
+        if let selectedType {
+            result = result.filter { $0.types.contains(selectedType) }
+        }
+        guard !searchText.isEmpty else { return result }
+        return result.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+    }
+
+    /// `nil` means "Todos" — always clears the filter directly. A concrete
+    /// type toggles: tapping the already-selected chip clears it too.
+    func selectType(_ type: String?) {
+        guard let type else {
+            selectedType = nil
+            return
+        }
+        selectedType = (selectedType == type) ? nil : type
     }
 
     func loadInitial() async {
