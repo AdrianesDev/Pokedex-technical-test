@@ -7,6 +7,9 @@ struct PokemonRepositoryImpl: PokemonRepository {
         self.localDataSource = localDataSource
     }
 
+    /// Caches on every successful fetch and falls back to that cache when
+    /// there's no connection — the offline path is silent by design, the
+    /// list screen doesn't need to know it's looking at stale data.
     func fetchList(limit: Int, offset: Int) async throws -> [Pokemon] {
         do {
             let response: PokemonListResponseDTO = try await apiClient.request(
