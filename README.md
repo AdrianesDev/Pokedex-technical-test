@@ -10,6 +10,12 @@ Reto técnico iOS: listado de Pokémon con búsqueda y filtro por tipo, pantalla
 
 **Diseño:** [Figma](https://www.figma.com/design/dJiIMetNZdy5gPFDRvL6Hm/Pokedex?node-id=0-1&t=5Yn0g79vGCDk4QTG-1)
 
+## Probarlo sin compilar (TestFlight)
+
+1. Instala la app **TestFlight** desde el App Store (si no la tienes).
+2. Abre este link desde tu iPhone: [testflight.apple.com/join/76tSVb4C](https://testflight.apple.com/join/76tSVb4C)
+3. Toca **Ver en TestFlight** → **Aceptar** → **Instalar**.
+
 ## Cómo correrlo
 
 - Xcode 26 (o el que traiga soporte para Swift Testing y `@Observable`).
