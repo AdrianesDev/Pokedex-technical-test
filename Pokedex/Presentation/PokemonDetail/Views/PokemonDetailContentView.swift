@@ -109,7 +109,12 @@ struct PokemonDetailContentView: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 12) {
                             ForEach(evolutions) { evolution in
-                                EvolutionCardView(evolution: evolution)
+                                NavigationLink(value: evolution.id) {
+                                    EvolutionCardView(evolution: evolution)
+                                        .buttonStyle(.plain)
+                                        .tint(.primary)
+                                }
+                               
                             }
                         }
                     }
